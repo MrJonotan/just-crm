@@ -19,6 +19,7 @@ return [
     'employees'                     => 'Сотрудники',
     'documents'                     => 'Документы',
     'clients'                       => 'Клиенты',
+    'client'                        => 'Клиент',
     'statistics'                    => 'Статистика',
     'directories'                   => 'Справочники',
     'by_employee'                   => 'по сотрудникам',
@@ -61,4 +62,5 @@ return [
     'default'                       => 'По умолчанию',
     'department_id'                 => 'Отдел',
     'organization'                  => 'Организация',
+    'by_clients'                    => 'по клиентам'
 ];

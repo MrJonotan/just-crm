@@ -21,15 +21,17 @@ return new class extends Migration
             $table->integer('manager_id'); // Менеджер
             $table->integer('client_id'); // Клиент
             $table->char('color'); // Цвет
-            $table->dateTime('begin_start_date_plan')->nullable(); // Начальная, плановая дата старта выполнения
-            $table->dateTime('last_start_date_plan')->nullable(); // Крайняя, плановая дата старта выполнения
+            $table->dateTime('start_date_plan')->nullable(); // Начальная, плановая дата старта выполнения
             $table->dateTime('start_date_fact')->nullable(); // Фактическая дата начала выполнения
-            $table->dateTime('begin_end_date_plan')->nullable(); // Начальная, плановая дата окончания выполнения
-            $table->dateTime('last_end_date_plan')->nullable();  // Крайняя, плановая дата окончания выполнения
+            $table->dateTime('end_date_plan')->nullable();  // Крайняя, плановая дата окончания выполнения
             $table->dateTime('end_date_fact')->nullable(); // Фактическая дата окончания выполнения
-            $table->longText('description', '5000')->nullable();
-            $table->integer('budget_plan')->nullable();
-            $table->integer('budget_fact')->nullable();
+            $table->longText('specific', '1000')->nullable();
+            $table->longText('measurable', '1000')->nullable();
+            $table->longText('achievable', '1000')->nullable();
+            $table->longText('relevant', '1000')->nullable();
+            $table->longText('time_bound', '1000')->nullable();
+            $table->bigInteger('budget_plan')->nullable();
+            $table->bigInteger('budget_fact')->nullable();
             $table->float('hours');
             $table->float('readiness')->nullable();
             $table->timestamps();

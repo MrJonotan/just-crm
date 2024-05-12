@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\JobStatus;
 use App\Models\Position;
+use App\Models\ProjectEmployee;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -27,6 +28,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PrioritySeeder::class);
         $this->call(ProjectSeeder::class);
         $this->call(ProjectStatusSeeder::class);
+        $this->call(ProjectEmployee::class);
         $this->call(RoleSeeder::class);
         $this->call(RoleUser::class);
         $this->call(PermissionRoleSeeder::class);
