@@ -13,7 +13,7 @@ class ProjectChat extends Model
     protected $fillable = [
         'project_id',
         'employee_id',
-        'message',
+        'text',
     ];
 
     public function project() : HasOne {

@@ -31,7 +31,7 @@ class UserPolicy
      * @param  \App\Models\Project $project
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, User $model, Project $project)
+    public function view(User $user, Project $project)
     {
         return $user->id === $project->manager()->id
              ? Response::allow()

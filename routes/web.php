@@ -36,6 +36,9 @@ Route::group(['middleware' => ['auth', 'permission:view-employee']], function ()
 Route::group(['middleware' => ['auth', 'permission:view-project']], function () {
     Route::resource('projects', ProjectsController::class);
     Route::post('projects_search', [ProjectsController::class, 'search']);
+    Route::post('get_end_date', [ProjectsController::class, 'getEndDate']);
+    Route::put('projects/{id}/status_update', [ProjectsController::class, 'updateStatus']);
+    Route::put('projects/{id}/message', [ProjectsController::class, 'addMessage']);
 });
 
 Route::group(['middleware' => ['auth', 'permission:view-document']], function () {
@@ -48,8 +51,13 @@ Route::group(['middleware' => ['auth', 'permission:view-system-setting']], funct
     Route::post('get_table', [SettingController::class, 'getTable']);
 });
 
-Route::resource('tasks', TaskController::class);
-Route::resource('dashboard', DashboardController::class);
+Route::resource('tasks', TaskController::class)->middleware('auth');
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::resource('dashboard', DashboardController::class);
+    Route::post('dashboard/get_tasks', [DashboardController::class, 'getTasks']);
+});
+
 Route::get('/statistics/employee', function () {
     return view('crm.statistics.employees_statistics');
 });

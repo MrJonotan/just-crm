@@ -20,9 +20,8 @@ class Position extends Model
         'updated_at'
     ];
 
-    public function employee() : HasOne
-    {
-        return $this->hasOne(User::class, 'position_id', 'id');
+    public function employee() : BelongsTo {
+        return $this->belongsTo(User::class);
     }
 
     public function department() : HasOne

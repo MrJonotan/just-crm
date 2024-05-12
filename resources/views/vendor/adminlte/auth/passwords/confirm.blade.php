@@ -7,6 +7,7 @@
 @section('classes_body', 'lockscreen')
 
 @php( $password_reset_url = View::getSection('password_reset_url') ?? config('adminlte.password_reset_url', 'password/reset') )
+@php( $password_recover_url = View::getSection('password_recover_url') ?? config('adminlte.password_recover_url', 'password/recover') )
 @php( $dashboard_url = View::getSection('dashboard_url') ?? config('adminlte.dashboard_url', 'home') )
 
 @if (config('adminlte.use_route_url', false))

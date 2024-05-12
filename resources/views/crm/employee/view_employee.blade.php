@@ -84,6 +84,7 @@
                 $('#action_title').html("{{__('adminlte::menu.add')}} {{__('adminlte::menu.employee')}}a");
                 $('#newEmployee').modal('show');
                 $('#add').attr('hidden', false);
+                $('.password').attr('hidden', false);
                 $('#update').attr('hidden', true);
                 $('#form_position_id').children().each(function (){
                     if($(this).attr('class')){
@@ -91,7 +92,7 @@
                     }
                 });
                 $('#employee_form').find('input, select').val('');
-                $('#form_photo').attr('src', '/vendor/employees_photo/photos/no_photo.png');
+                $('#form_photo').attr('src', '/vendor/photos/no_photo.png');
             });
 
             $('#add').click(function (){
@@ -146,13 +147,13 @@
                         $('#update').attr('hidden', false);
                         employeeEdit($(this).attr('id'));
                         $('#newEmployee').modal('show');
+                        $('.password').attr('hidden', true);
                     });
                 },
             });
         }
 
         function employeeCreate(){
-            // console.log($('#employee_form').getDivData());
             $.ajax({
                 type: 'GET',
                 url: 'employees/create',
@@ -197,7 +198,10 @@
                     $('#newEmployee').modal('hide');
                     toastr.success(response.message);
                     employeesFilter();
-                    $('#employee_form').find('input, select').val("");
+                    $('#employee_form').find('input, select').each(function() {
+                        if($(this).attr('name') !== '_token')
+                            $(this).val("");
+                    });
                 },
                 error: function(xhr, status, error) {
                     let errors = ($.parseJSON(xhr.responseText));
@@ -221,6 +225,8 @@
 
         $('#update').click(function (){
             employeeUpdate($('#form_id').val());
-        })
+        });
+
+        $('.phone').mask('+7(999)999-99-99');
     </script>
 @stop

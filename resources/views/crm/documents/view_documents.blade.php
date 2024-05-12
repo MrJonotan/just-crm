@@ -4,11 +4,11 @@
     <div class="row">
         <div class="col-12">
             <nav aria-label="breadcrumb">
-                @if(Auth::user()->hasRole('admin'))
+                @permission('create-document')
                     <ol class="breadcrumb float-right">
-                        <li><button type="button" id="addDocument" class="btn btn-tool"><i class="fa-solid fa-plus" title="Добавить документ"></i></button></li>
+                        <li><button type="button" id="addDocument" class="btn btn-tool"><i class="fa-solid fa-file-circle-plus" title="Добавить документ"></i></button></li>
                     </ol>
-                @endif
+                @endpermission
                 <ol class="breadcrumb m-1">
                     <li class="breadcrumb-item active">Документы</li>
                 </ol>

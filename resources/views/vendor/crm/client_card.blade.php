@@ -1,35 +1,37 @@
 @foreach($clients as $client)
-
     <div class="col-4">
-        <a href="{{"clients/$client->id"}}">
-            <div class="card" style="color: #000000">
-                <div class="card-header">
-                    @include('.vendor.crm.update_delete_buttons', ['permission' => 'client', 'model' => $client])
-{{--                    @permission('delete-client')--}}
-{{--                        <button class=" badge btn-danger float-right p-1 m-1 delete" id="{{$client->id}}"><i class="fa-solid fa-trash"></i></button>--}}
-{{--                    @endpermission--}}
-{{--                    @permission('update-client')--}}
-{{--                        <button class="badge btn-warning float-right p-1 m-1 update" id="{{$client->id}}"><i class="fa-solid fa-pen-to-square"></i></button>--}}
-{{--                    @endpermission--}}
-                    <h3 class="card-title">{{$client->first_name .' '. $client->name .' '. $client->last_name}}</h3>
+        <div class="card bg-light d-flex flex-fill">
+            <div class="card-header text-muted border-bottom-0">
+                <a href="clients/{{$client->id}}">
+                    <h2 class="card-title">{{$client->first_name . ' ' . $client->name . ' ' . $client->last_name}}</h2>
+                </a>
+            </div>
+            <div class="card-body row " style="height: 220px">
+                <div class="col-3 photo float-left">
+                    <a href="clients/{{$client->id}}">
+                        <img class="img-fluid" src="{{$client->photo}}" alt="{{$client->first_name . ' ' . $client->name . ' ' . $client->last_name}}" style="width: 120px; border-radius: 15px;">
+                    </a>
                 </div>
-                <div class="card-body row" style="height: 185px">
-                    @if(isset($client->photo))
-                        <div class="col-3">
-                            <img src="{{$client->photo}}" alt="{{$client->first_name .' '. $client->name .' '. $client->last_name}}" style="width: 5vw; border-radius: 15px">
-                        </div>
-                        <div class="col-9">
+                <div class="col-9 p-1 ">
+                    @if($client->projects->last() && $client->projects->last()->status_id !== 1)
+                        <h1 class="lead"><b>{{$client->projects->last()->title}}</b></h1>
                     @else
-                        <div class="col-12 row">
+                        <h1 class="lead"><b>Нет активных проектов</b></h1>
                     @endif
-                            <p><b>Организация:</b> <span>{{$client->organization}}</span></p>
-                            <p><b>Почта: </b><span>{{$client->email}}</span></p>
-                            <p><b>Телефон: </b><span>{{$client->phone}}</span></p>
-                    </div>
+                    @isset($client->status->title)
+
+                        <h5 class="text-muted text-lg"><b>{{$client->status->title}}</b></h5>
+                    @endisset
+                    <ul class="ml-4 mb-0 fa-ul text-muted ">
+                        <li><span class="fa-li float-right"><i class="fas fa-lg fa-building"></i></span> {{$client->organization}}</li>
+                        <li>
+                            <span class="fa-li "><i class="fas fa-lg fa-phone"></i></span> {{$client->phone}} /
+                            <span><i class="fa-solid fa-at"></i></span><a href="mailto:{{$client->email}}"> {{$client->email}}</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </a>
+        </div>
     </div>
-
 @endforeach
 

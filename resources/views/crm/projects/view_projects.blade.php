@@ -6,7 +6,7 @@
             <nav aria-label="breadcrumb">
                 @permission('create-project')
                     <ol class="breadcrumb float-right">
-                        <li><button type="button" id="create" class="btn btn-tool" ><i class="fa-solid fa-plus" title="Добавить проект"></i></button></li>
+                        <li><a href="/projects/create" type="button" id="create" class="btn btn-tool" ><i class="fa-solid fa-plus" title="Добавить проект"></i></a></li>
                     </ol>
                 @endpermission
                 <ol class="breadcrumb m-1">
@@ -79,7 +79,7 @@
 
     <div class="modal fade bd-example-modal-lg" id="createProject" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-lg" role="document">
-            @include('crm.project.create')
+{{--            @include('crm.project.create')--}}
         </div>
     </div>
 @stop

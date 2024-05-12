@@ -24,7 +24,7 @@ class DocumentController extends Controller
             return redirect('projects');
         }
         $projects->prepend(new Project(['title' => "Не выбрано"]));
-        return view('crm.documents.view_documents', ['projects' => $projects, 'tasks' => $tasks, ]);
+        return view('crm.documents.view_documents', ['projects' => $projects, 'tasks' => $tasks, 'clients' => $clients]);
     }
 
     public function search()

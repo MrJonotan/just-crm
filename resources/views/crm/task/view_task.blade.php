@@ -30,7 +30,7 @@
         <div class="col-8">
             <div class="card">
                 <div class="card-header" style="padding: 0;">
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <ul class="nav nav-tabs border-bottom-0" id="myTab" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="home" aria-selected="true">Описание задачи</a>
                         </li>

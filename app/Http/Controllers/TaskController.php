@@ -10,6 +10,10 @@ class TaskController extends Controller
     public function show($id)
     {
         $task = Task::find($id);
-        return view('crm.task.view_task', ['task' => $task]);
+        if($task){
+            return view('crm.task.view_task', ['task' => $task]);
+        }else{
+            return redirect('/projects');
+        }
     }
 }

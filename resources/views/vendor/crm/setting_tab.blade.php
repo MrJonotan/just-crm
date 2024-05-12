@@ -29,14 +29,16 @@
                             @endif
                         @endforeach
                         <td id="actions">
-                            @if(!isset($row['default']))
-                                @permission('delete-system-setting')
-                                    <button class=" badge btn-danger float-right p-1 m-1 delete" id="{{$row['id']}}"><i class="fa-solid fa-trash"></i></button>
-                                @endpermission
-                                @permission('update-system-setting')
-                                    <button class="badge btn-warning float-right p-1 m-1 edit" id="{{$row['id']}}"><i class="fa-solid fa-pen-to-square"></i></button>
-                                @endpermission
-                            @endif
+                            <div class="float-right">
+                                @if(!isset($row['default']))
+                                    @permission('update-system-setting')
+                                    <button class="btn btn-tool edit" id="{{$row['id']}}"><i class="fa-solid fa-pen-to-square"></i></button>
+                                    @endpermission
+                                    @permission('delete-system-setting')
+                                        <button class="btn btn-tool delete" id="{{$row['id']}}"><i class="fa-solid fa-trash"></i></button>
+                                    @endpermission
+                                @endif
+                            </div>
                         </td>
                     </tr>
                 @endforeach

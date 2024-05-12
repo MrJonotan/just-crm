@@ -14,8 +14,6 @@
                 </ol>
             </nav>
         </div>
-
-
         <div class="col-12">
             <div class="card collapsed-card">
                 <div class="card-header ui-sortable-handle" style="cursor: move;">
@@ -67,11 +65,32 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade bd-example-modal-lg" id="newClient" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                @include('crm.client.create')
+            </div>
+        </div>
     </div>
 @stop
 @section('js')
     <script>
         $('document').ready(function () {
+            $('#addClient').click( function (){
+                $('#action_title').html("{{__('adminlte::menu.add')}} {{__('adminlte::menu.employee')}}a");
+                $('#newClient').modal('show');
+                $('#add').attr('hidden', false);
+                $('.password').attr('hidden', false);
+                $('#update').attr('hidden', true);
+                $('#form_position_id').children().each(function (){
+                    if($(this).attr('class')){
+                        $(this).attr('hidden', 'true');
+                    }
+                });
+                $('#client_form_form').find('input, select').val('');
+                $('#form_photo').attr('src', '/vendor/photos/no_photo.png');
+            });
+
+
             clientsFilter();
         });
 
@@ -105,6 +124,5 @@
                 },
             });
         }
-        $
     </script>
 @stop

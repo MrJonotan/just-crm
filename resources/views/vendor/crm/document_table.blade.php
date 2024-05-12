@@ -1,27 +1,35 @@
 <table class="table">
     <thead>
-{{--    <tr>--}}
-{{--        <th>{{__('adminlte::menu.title')}} {{__('adminlte::menu.documents)}}</th><th>{{__('adminlte::menu.title')}} {{__('adminlte::menu.project')}}</th>--}}
-{{--    </tr>--}}
+    <tr>
+        <th>Название документа</th><th>Проект/Задача/Клиент</th><th></th>
+    </tr>
     </thead>
     <body>
-        @foreach($documents as $document)
+        @if($documents->isNotEmpty())
+            @foreach($documents as $document)
+                <tr>
+                    <td hidden="hidden">{{$document->id}}</td>
+                    <td>{{$document->title}}</td>
+                    <td>
+                        @if($document->project_id !== null)
+                            <a href="projects/{{$document->project->id}}">{{$document->project->title}}</a></td>
+                        @elseif($document->task_id !== null)
+                            <a href="tasks/{{$document->task->id}}">{{$document->task->title}}</a></td>
+                        @else
+                            <a href="clients/{{$document->client->id}}">{{$document->client->first_name.' '.$document->client->name.' '.$document->client->last_name}}</a></td>
+                        @endif
+                    <td>
+                        <div class="card-tools float-right">
+                            <button class="btn btn-tool download" title="Скачать"><i class="fa-solid fa-file-arrow-down"></i></button>
+                            <button class="btn btn-tool delete" title="Удалить"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            @endforeach
+        @else
             <tr>
-                <td hidden="hidden">{{$document->id}}</td>
-                <td>{{$document->title}}</td>
-                <td>
-                    @if($document->project_id !== null)
-                        <a href="projects/{{$document->project->id}}">{{$document->project->title}}</a></td>
-                    @elseif($document->task_id !== null)
-                        <a href="tasks/{{$document->task->id}}">{{$document->task->title}}</a></td>
-                    @else
-                        <a href="clients/{{$document->client->id}}">{{$document->client->first_name ." ". $document->client->name}}</a></td>
-                    @endif
-                <td>
-                    <button class="badge btn-danger float-right p-1 m-1 delete" title="Удалить"><i class="fa-solid fa-trash"></i></button>
-                    <button class="badge btn-success float-right p-1 m-1 download" title="Скачать"><i class="fa-solid fa-file-arrow-down"></i></button>
-                </td>
+                <td colspan="3"><h2>Нет документов</h2></td>
             </tr>
-        @endforeach
+        @endif
     </body>
 </table>

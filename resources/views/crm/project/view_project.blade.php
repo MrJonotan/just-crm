@@ -2,34 +2,9 @@
 @section('title', $project->title)
 @section('content')
     <div class="row">
-        <div class="col-12">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb float-right">
-                    <li>
-                        <button type="button" class="btn btn-tool" id="calendarGraph">
-                            <i class="fa-solid fa-calendar-week" title="Календарный график"></i>
-                        </button>
-                    </li>
-                    @if(Auth::user()->id === $project->manager_id)
-                        <li>
-                            <button type="button" class="btn btn-tool" id="edit">
-                            <i class="fa-solid fa-pen" title="Редактировать"></i>
-                            </button>
-                        </li>
-                        <li>
-                            <button type="button" class="btn btn-tool" id="destroy">
-                                <i class="fa-solid fa-trash" title="Удалить"></i>
-                            </button>
-                        <li>
-                    @endif
-                    <li class="breadcrumb-item"><span class="badge badge-{{$project->priority->color}}" title="Приоритет">{{$project->priority->title}}</span></li>
-                    <li class="breadcrumb-item"><span class="badge badge-{{$project->status->color}}" title="Статус">{{$project->status->title}}</span></li>
-                </ol>
-                <ol class="breadcrumb m-1">
-                    <li class="breadcrumb-item"><a href="/projects">Проекты</a></li>
-                    <li class="breadcrumb-item active">{{$project->title}}</a></li>
-                </ol>
-            </nav>
+        <input value="{{$project->id}}" id="project_id" hidden="hidden">
+        <div class="col-12" id="header">
+            @include('vendor.crm.project_header')
         </div>
         <div class="col-6 row" style="margin: 0%; padding: 0%">
             <div class="col-12 row">
@@ -39,8 +14,8 @@
                             <b class="card-title"><i class="fa-regular fa-flag"></i> Начало</b>
                         </div>
                         <div class="p-2">
-                            <b>План: </b><span>{{$project->begin_start_date_plan}}</span></br>
-                            <b>Факт: </b><span>{{$project->start_date_fact}}</span>
+                            <b>План: </b><span class="float-right">{{$project->start_date_plan}}</span></br>
+                            <b>Факт: </b><span class="float-right">{{$project->start_date_fact}}</span>
                         </div>
                     </div>
                 </div>
@@ -50,8 +25,8 @@
                             <b class="card-title"><i class="fa-solid fa-flag-checkered"></i> Окончание </b>
                         </div>
                         <div class="p-2">
-                            <b>План: </b><span>{{$project->begin_end_date_plan}}</span></br>
-                            <b>Факт: </b><span>{{$project->end_date_fact}}</span>
+                            <b>План: </b><span class="float-right">{{$project->end_date_plan}}</span></br>
+                            <b>Факт: </b><span class="float-right">{{$project->end_date_fact}}</span>
                         </div>
                     </div>
                 </div>
@@ -61,8 +36,8 @@
                             <b class="card-title"><i class="fa-solid fa-money-bills"></i> Бюджет</b>
                         </div>
                         <div class="p-2">
-                            <b>План: </b><span>{{$project->budget_plan}} <i class="fa-solid fa-ruble-sign"></i></span></br>
-                            <b>Факт: </b><span>{{$project->budget_fact}}</span>
+                            <b>План: </b><span class="float-right">{{$project->budget_plan}} <i class="fa-solid fa-ruble-sign"></i></span></br>
+                            <b>Факт: </b><span class="float-right">{{$project->budget_fact}}</span>
                         </div>
                     </div>
                 </div>
@@ -83,14 +58,18 @@
                         <div class="card-header">
                             <b class="card-title"><i class="fa-solid fa-people-group"></i> Команда</b>
                         </div>
-                        <div class="p-2" style="min-height: 6.7vh; max-height: 12vh; overflow-y: scroll">
-                            @if($project->employees->isNotEmpty())
-                                @foreach($project->employees as $list)
-                                    {{$list->employee->first_name .' '. $list->employee->name .' '. $list->employee->last_name}}</br>
-                                @endforeach
-                            @else
-                                <p>Нет назначенных сотрудников</p>
-                            @endif
+                        <div class="p-2 direct-chat-messages">
+                            <ul class="list-group list-group-flush" style="min-height: 6.7vh; max-height: 12vh;">
+                                @if($project->employees->isNotEmpty())
+                                    @foreach($project->employees as $list)
+                                        <li class="list-group-item">
+                                            {{$list->employee->first_name .' '. $list->employee->name .' '. $list->employee->last_name}}
+                                        </li>
+                                    @endforeach
+                                @else
+                                    <li>Нет назначенных сотрудников</li>
+                                @endif
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -101,7 +80,9 @@
                                 <b class="card-title"><i class="fa-solid fa-user-tie"></i> Менеджер</b>
                             </div>
                             <div class="p-2" style="min-height: 6.7vh; max-height: 12vh">
-                                <span>{{$project->manager->first_name .' '. $project->manager->name .' ' . $project->manager->last_name}}</span>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">{{$project->manager->first_name .' '. $project->manager->name .' ' . $project->manager->last_name}}</li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -111,7 +92,8 @@
                                 <b class="card-title"><i class="fa-solid fa-handshake-simple"></i> Часы</b>
                             </div>
                             <div class="p-2" style="min-height: 6.7vh; max-height: 12vh">
-                                {{--                        <span>{{$project->client->first_name .' '. $project->client->name . ' '. $project->client->last_name}}</span>--}}
+                                <b>План: </b><span class="float-right">{{$project->hours}}</span><br/>
+                                <b>Факт: </b><span class="float-right">-</span>
                             </div>
                         </div>
                     </div>
@@ -120,8 +102,7 @@
                             <div class="card-header">
                                 <b class="card-title"><i class="fa-solid fa-handshake-simple"></i> Цвет</b>
                             </div>
-                            <div class="p-2" style="min-height: 6.7vh; max-height: 12vh">
-                                {{--                        <span>{{$project->client->first_name .' '. $project->client->name . ' '. $project->client->last_name}}</span>--}}
+                            <div class="card-body" style="min-height: 6.7vh; max-height: 12vh; background-color:{{$project->color}}">
                             </div>
                         </div>
                     </div>
@@ -133,7 +114,7 @@
             <div class="col-12 row">
                 <div class="card row float-right" style="width: 48.9vw; min-width: 40.5vw; height: 376px">
                     <div class="card-header" style="padding: 0;">
-                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <ul class="nav nav-tabs border-bottom-0" id="myTab" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true"><i class="fa-solid fa-bars"></i> Описание</a>
                             </li>
@@ -145,18 +126,32 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body p-3" style="overflow-y: scroll">
                         <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+                                <div class="row p-0">
+                                    <div class="col-2"><b>Specific</b></div>
+                                    <div class="col-10">@isset($project->specific){{$project->specific}}@endisset</div>
 
-                            <div class="tab-pane fade show active row" id="description" role="tabpanel" aria-labelledby="description-tab">
-                                {{htmlentities($project->description)}}<br/>
-                                Gjitk yf [eq <br/> Uyblf
+                                    <div class="col-2"><b>Measurable</b></div>
+                                    <div class="col-10">@isset($project->measurable){{$project->measurable}}@endisset</div>
+
+                                    <div class="col-2"><b>Achievable</b></div>
+                                    <div class="col-10">@isset($project->achievable){{$project->achievable}}@endisset</div>
+
+                                    <div class="col-2"><b>Relevant</b></div>
+                                    <div class="col-10">@isset($project->relevant){{$project->relevant}}@endisset</div>
+
+                                    <div class="col-2"><b>Time-bound</b></div>
+                                    <div class="col-10">@isset($project->time_bound){{$project->time_bound}}@endisset</div>
+                                </div>
                             </div>
 
                             <div class="tab-pane fade row" id="statistic" role="tabpanel" aria-labelledby="statistic-tab">
                                 <div class="col-6">
                                     <span class="direct-chat-timestamp">Прогресс</span>
                                     <div id="chartPie">
+
                                     </div>
                                 </div>
                                 <div class="col-6">
@@ -167,15 +162,9 @@
                             </div>
 
                             <div class="tab-pane fade" id="docs" role="docs" aria-labelledby="docs-tab" style="overflow-y: scroll;">
-                                <table class="table">
-                                    @if(!empty($project->documents))
-                                        @foreach($project->documents as $document)
-                                            <tr>
-                                                <td>{{$document->title}}</td> <td><button class="btn btn-success btn-sm" id="{{$document->id}}">Скачать</button></td>
-                                            </tr>
-                                        @endforeach
-                                    @endif
-                                </table>
+                                <div class="col-12">
+                                    @include('vendor.crm.document_table', ['documents' => $project->documents])
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -188,11 +177,13 @@
                 <div class="card" style="height: 42.5vh">
                     <div class="card-header">
                         <b class="card-title"><i class="fa-solid fa-list-check"></i> Список задач</b>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool">
-                                <i class="fas fa-plus"></i>
-                            </button>
-                        </div>
+                        @if(Auth::user()->id === $project->manager_id)
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" id="createTask">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        @endif
                     </div>
                     <div class="card-body" style="overflow-y: scroll; height: 37vh; padding-top: 0">
                         <table class="table table-head-fixed">
@@ -228,9 +219,6 @@
             </div>
         </div>
 
-
-
-
         <div class="card direct-chat direct-chat-success col-4">
             <div class="card-header">
                 <b class="card-title"><i class="fa-solid fa-comments"></i> Чат</b>
@@ -239,65 +227,37 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="direct-chat-messages">
-                    @foreach($chat as $message)
-                        {{$message}}
+                <div class="direct-chat-messages" id="chat-body">
+                    @foreach($project->project_chat as $message)
+                        @if($message->employee_id == Auth::user()->id)
+                            @include('vendor.crm.project_message_my')
+                        @else
+                            @include('vendor.crm.project_message_other')
+                        @endif
                     @endforeach
                 </div>
             </div>
-
-            <div class="card-footer">
-                <form action="#" method="post">
-                    <div class="input-group">
-                        <input type="text" name="message" placeholder="Type Message ..." class="form-control">
-                        <span class="input-group-append">
-                            <button type="button" class="btn btn-warning">Send</button>
-                            </span>
-                    </div>
-                </form>
-            </div>
-
-        </div>
-
-
-
-
-
-
-{{--        <div class="col-4 row" style="margin: 0%; padding: 0%">--}}
-{{--            <div class="col-12 row" style="margin-left: 0.1%;">--}}
-{{--                <div class="card float-right" style="width: 45vw; min-width: 28vw; height: 42.5vh">--}}
-{{--                    <div class="card-header">--}}
-{{--                        <b class="card-title"><i class="fa-solid fa-comments"></i> Чат</b>--}}
-{{--                    </div>--}}
-{{--                    <div class="direct-chat-messages" style="height: 30.2vh; overflow-y: scroll;">--}}
-{{--                        @foreach($chat as $message)--}}
-{{--                            {{$message}}--}}
-{{--                        @endforeach--}}
-{{--                    </div>--}}
-{{--                    <div class="card-footer">--}}
-{{--                        <form action="#" method="post">--}}
-{{--                            <div class="input-group">--}}
-{{--                                <input type="text" name="message" placeholder="Напишите сообщение ..." class="form-control">--}}
-{{--                                <span class="input-group-append">--}}
-{{--                                        <button type="button" class="btn btn-warning"><i--}}
-{{--                                                class="fa-solid fa-paper-plane"></i></button>--}}
-{{--                                    </span>--}}
-{{--                            </div>--}}
-{{--                        </form>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-
-        <div class="modal fade bd-example-modal-lg" id="editProject" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-lg" role="document">
-                @include('crm.project.create')
+            <div class="card-footer" id="chat">
+                <input type="text" name="employee_id"  value="{{Auth::user()->id}}" hidden="hidden">
+                <div class="input-group">
+                    <input type="text" name="text" id="text" placeholder="Введите сообщение ..." class="form-control">
+                    <span class="input-group-append">
+                        <button type="button" class="btn btn-secondary" id="send">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </span>
+                </div>
+                @csrf
             </div>
         </div>
         <div class="modal fade bd-example-modal-lg" id="calendarModal" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
                 @include('crm.project.calendar')
+            </div>
+        </div>
+        <div class="modal fade bd-example-modal-lg" id="taskModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                @include('crm.task.create')
             </div>
         </div>
         <div class="modal fade bd-example-modal-lg" id="deletionСonfirmationModal" tabindex="-3" role="dialog">
@@ -325,20 +285,34 @@
 @section('js')
     <script>
         $('document').ready(function () {
-            $('#edit').click(function (){
+            $('#edit').click(function () {
                 $('#editProject').modal('show');
                 $('#project_edit').html('Редактировать проект');
             });
-            $('#calendarGraph').click(function (){
+            $('#calendarGraph').click(function () {
                 $('#calendarModal').modal('show');
             });
+            $('#createTask').click(function () {
+                $('#action_title').html('Создать задачу');
+                $('#taskModal').modal('show');
+                $('#update').hidden();
+            });
+            $('.editStatus').click(function () {
+                projectStatusUpdate($('#project_id').val(), $(this).attr('id'));
+            })
 
-            $('#delete_project').click(function (){
+            $('#delete_project').click(function () {
                 $('#deletionСonfirmationModal').modal('show');
                 $('#deleted_project').text($('#project_name').text());
             });
-            $('#deleted').click(function (){
-                window.location.replace("{{'/projects'}}");
+            $('#send').click(function (){
+                addMessage($('#project_id').val())
+            });
+
+            $('#destroy').click(function () {
+                if(confirm('Вы действительно хотите удалить проект?')){
+                    projectDestroy($('#project_id').val());
+                }
             });
 
             var calendarEl = document.getElementById('calendar');
@@ -350,30 +324,70 @@
             });
             calendar.render();
 
-            const ctx = $('#projectChartPie');
+            jQuery.prototype.getDivData = function () {
+                data = {};
+                $(this).find('input, select').each(function(){
+                    data[$(this).attr('name')] = $(this).val();
+                })
+                return data;
+            };
 
-            var chart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Red', 'Blue', 'Green'],
-                    datasets: [{
-                        label: 'Задачи',
-                        data: [2, 9, 15],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-
-            chart.render();
+            function projectStatusUpdate(id, status_id) {
+                $.ajax({
+                    type: 'PUT',
+                    url: '/projects/'+ id +'/status_update/',
+                    data: {
+                        'status_id': status_id,
+                        '_token': '{{ @csrf_token() }}'
+                    },
+                    success: function (response) {
+                        $('#header').html("")
+                        $('#header').html(response);
+                        $('.editStatus').click(function () {
+                            projectStatusUpdate($('#project_id').val(), $(this).attr('id'));
+                        })
+                    },
+                    error: function (xhr, status, error) {
+                        let errors = ($.parseJSON(xhr.responseText));
+                        $.each(errors.errors, function () {
+                            toastr.error($(this)[0]);
+                        })
+                    },
+                });
+            }
         });
 
+        function addMessage(id) {
+            $.ajax({
+                type: 'PUT',
+                url: '/projects/'+ id +'/message',
+                data: $('#chat').getDivData(),
+                success: function (response) {
+                    $('#chat-body').append(response);
+                    $('#text').val("");
+                },
+                error: function (xhr, status, error) {
+                    toastr.error(xhr.responseJSON.error);
+                },
+            });
+        }
+
+        function projectDestroy(id){
+            $.ajax({
+                type: 'DELETE',
+                url: '/projects/'+ id,
+                data: {'_token': '{{ @csrf_token() }}'},
+                success: function (response) {
+
+                },
+                error: function (xhr, status, error) {
+                    let errors = ($.parseJSON(xhr.responseText));
+                    $.each(errors.errors, function () {
+                        toastr.error($(this)[0]);
+                    })
+                },
+            });
+        }
 
     </script>
 @stop

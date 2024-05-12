@@ -237,7 +237,7 @@ return [
     'right_sidebar_theme' => 'dark',
     'right_sidebar_slide' => true,
     'right_sidebar_push' => true,
-    'right_sidebar_scrollbar_theme' => 'os-theme-light',
+    'right_sidebar_scrollbar_theme' => 'os-theme-dark',
     'right_sidebar_scrollbar_auto_hide' => 'l',
 
     /*
@@ -257,6 +257,7 @@ return [
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
+    'password_recover_url' => 'password/recover',
     'password_reset_url' => 'password/reset',
     'password_email_url' => 'password/email',
     'profile_url' => false,
@@ -340,7 +341,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'by_clients',
-                    'icon'    => 'fas fa-user-tie',
+                    'icon'    => 'fas fa-circle-user',
                     'url'  => 'statistics/employee',
                     'permission' => ['view-employee-statistic'],
                 ],
@@ -376,6 +377,7 @@ return [
                     'permission' => ['view-employee-setting'],
                 ]
             ],
+            'permission' => ['view-setting'],
         ],
     ],
 
@@ -541,7 +543,7 @@ return [
                 ],
             ],
         ],
-        'Pace' => [
+            'Pace' => [
             'active' => false,
             'files' => [
                 [

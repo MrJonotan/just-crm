@@ -5,6 +5,6 @@
     </div>
     <img class="direct-chat-img" src="/{{$message->employee->photo}}" alt="message user image">
     <div class="direct-chat-text">
-        {{$message->message}}
+        {{$message->text}}
     </div>
 </div>

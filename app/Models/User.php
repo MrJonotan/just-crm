@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 use Laratrust\Laratrust;
 use Laratrust\Traits\LaratrustUserTrait;
@@ -45,10 +46,10 @@ class User extends Authenticatable
     }
 
     public function getPhotoAttribute ($data) {
-        if(!$data && !file_exists("..public/vendor/employees_photo/photos/" . $data)) {
-            return "vendor/employees_photo/photos/no_photo.png";
+        if(!$data || !file_exists("vendor/photos/" . $data)) {
+            return "vendor/photos/no_photo.png";
         }else{
-            return "vendor/employees_photo/photos/" . $data;
+            return "vendor/photos/" . $data;
         }
     }
 
@@ -68,8 +69,9 @@ class User extends Authenticatable
         }
     }
 
-    public function position() : BelongsTo {
-        return $this->belongsTo(Position::class);
+    public function position() : HasOne
+    {
+        return $this->hasOne(Position::class, 'id', 'position_id');
     }
 
     public function job_status() : BelongsTo {
@@ -80,8 +82,8 @@ class User extends Authenticatable
         return $this->belongsTo(Department::class);
     }
 
-    public function project() : BelongsTo {
-        return $this->belongsTo(Project::class, 'manager_id');
+    public function project() : HasOne {
+        return $this->hasOne(Project::class, 'manager_id');
     }
 
     public function projects() : HasMany {
@@ -101,7 +103,7 @@ class User extends Authenticatable
     }
 
     public function project_chat() : BelongsTo {
-        return $this->belongsTo(ProjectChat::class, 'foreign_key');
+        return $this->belongsTo(ProjectChat::class, '');
     }
 
     public function client_history() : BelongsTo {
@@ -110,5 +112,14 @@ class User extends Authenticatable
 
     public function adminlte_image(){
         return $this->photo;
+    }
+
+    public function hasProject(int $project_id){
+        dd($user->id);
+        $result = ProjectEmployee::query()->where('project_id', $project_id)->where('employee_id', $user->id)->get();
+        if($result->isNotEmpty()){
+            return true;
+        }
+        return false;
     }
 }

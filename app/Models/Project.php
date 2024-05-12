@@ -20,35 +20,22 @@ class Project extends Model
         'manager_id',
         'client_id',
         'color',
-        'begin_start_date_plan',
-        'last_start_date_plan',
+        'start_date_plan',
         'start_date_fact',
-        'begin_end_date_plan',
-        'last_end_date_plan',
+        'end_date_plan',
         'end_date_fact',
+        'specific',
+        'measurable',
+        'achievable',
+        'relevant',
+        'time_bound',
         'budget_plan',
         'budget_fact',
         'hours',
         'readiness',
     ];
 
-    public function getBeginStartDatePlanAttribute($date){
-        if(!$date){
-            return "-";
-        }else{
-            return Carbon::parse($date)->format('d.m.Y H:i');
-        }
-    }
-
-    public function getLastStartDatePlanAttribute($date){
-        if(!$date){
-            return "-";
-        }else{
-            return Carbon::parse($date)->format('d.m.Y H:i');
-        }
-    }
-
-    public function getBeginStartDateFactAttribute($date){
+    public function getStartDatePlanAttribute($date){
         if(!$date){
             return "-";
         }else{
@@ -64,15 +51,7 @@ class Project extends Model
         }
     }
 
-    public function getBeginEndDatePlanAttribute($date){
-        if(!$date){
-            return "-";
-        }else{
-            return Carbon::parse($date)->format('d.m.Y H:i');
-        }
-    }
-
-    public function getLastEndDatePlanAttribute($date){
+    public function getEndDatePlanAttribute($date){
         if(!$date){
             return "-";
         }else{
